@@ -1,0 +1,16 @@
+.the-footer {
+    background-color: $text-color1;
+    font: normal normal 600 16px/22px Open Sans;
+}
+
+.the-footer-global {
+    background-color: $app-body-color;
+}
+
+.footer-link:hover {
+    color: white;
+    cursor: pointer;
+    img {
+        background-color: white;
+    }
+}

@@ -1,0 +1,35 @@
+.navBar {
+    &__header {
+        background-color: $app-color-gray;
+        // top: 21px;
+        // left: 1408px;
+        // width: 144px;
+        // height: 55px;
+        // text-align: left;
+        font: normal normal normal 20px/35px Open Sans;
+        letter-spacing: 0px;
+        // color: #000000;
+        // opacity: 1;
+        img {
+            width: 185px;
+            height: 30px;
+            @media(max-width: 768px) {
+                width: 150px;
+                height: 20px;
+            }
+        }
+        .lg-menu-items {
+            // @media(max-width: 769px) {
+            //     display: none;
+            // }
+        }
+    }
+    .lg-menu-items {
+        @media(max-width: 768px) {
+            text-align: center;
+        }
+    }
+    .fa-bars {
+        color: $text-color1;
+    }
+}
