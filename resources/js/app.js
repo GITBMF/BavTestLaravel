@@ -18,25 +18,25 @@ import mixin from './Mixins/index';
 import DefaultLayout from './layout/DefaultLayout';
 import TheFooter from './global/TheFooter';
 // import { routes } from './Router/routes';
-axios.interceptors.response.use(function(response) {
-    console.log("my response interceptor")
-    return response
-}, function(error) {
-    // const { config, response: { status } } = error
-    const { config, response } = error
-    const originalRequest = config
-    if (response && response.status === 401) {
-        //notication or redirection
-        // this.$vs.notify({
-        //     title: 'Error',
-        //     text: response.data['message'],
-        //     iconPack: 'feather',
-        //     icon: 'icon-check-circle',
-        //     color: 'danger'
-        // })
-    }
-    return Promise.reject(error)
-});
+// axios.interceptors.response.use(function(response) {
+//     console.log("my response interceptor")
+//     return response
+// }, function(error) {
+//     // const { config, response: { status } } = error
+//     const { config, response } = error
+//     const originalRequest = config
+//     if (response && response.status === 401) {
+//         //notication or redirection
+//         // this.$vs.notify({
+//         //     title: 'Error',
+//         //     text: response.data['message'],
+//         //     iconPack: 'feather',
+//         //     icon: 'icon-check-circle',
+//         //     color: 'danger'
+//         // })
+//     }
+//     return Promise.reject(error)
+// });
 
 function getToken() {
     return localStorage.getItem("access_token");
@@ -46,7 +46,7 @@ axios.interceptors.request.use(req => {
     // the `headers`.
     const token = getToken();
     if (!router.currentRoute.path.includes("/pages/login")) {
-        console.log("my request interceptor ==>> ", localStorage.getItem("access_token"))
+        console.log("my request interceptor ==>> ")
         req.headers.authorization = "Bearer " + localStorage.getItem("access_token");
         return req;
     }

@@ -49,7 +49,7 @@ class JwtAuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $user
+            'user' => $user
         ], Response::HTTP_OK);
     }
 

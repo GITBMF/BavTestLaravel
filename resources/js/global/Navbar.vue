@@ -34,16 +34,34 @@ grid-cols-1 md:flex md:flex-row md:justify-between items-center"
                     class="text-black hover:text-white px-3 rounded py-1"
                     >Products</router-link
                 >
-                <div
+                <!-- <div
                     @click="logout"
-                    v-if="
-                        this.the_token != '' &&
-                            this.the_token != null &&
-                            this.the_token != undefined
-                    "
+                    v-if="bridge_user"
                     class="text-black hover:text-white px-3 rounded py-1"
                 >
                     Logout
+                </div> -->
+                <div
+                    v-if="the_bridge_user"
+                    @click="toggleProfileMenu"
+                    class="px-2 flex relative items-center"
+                >
+                    <i
+                        class="cursor-pointer fas fa-user-circle"
+                        aria-hidden="true"
+                        >&nbsp;{{ the_bridge_user.name }}</i
+                    >
+
+                    <transition name="fade">
+                        <ul
+                            v-if="showProfileMenu"
+                            class="header-profil-ul absolute z-10 shadow top-full right-0 bg-white py-4 px-4 rounded-sm"
+                        >
+                            <li class="cursor-pointer" @click="logout">
+                                logout
+                            </li>
+                        </ul>
+                    </transition>
                 </div>
             </div>
         </header>
@@ -60,16 +78,28 @@ import FixHeader from "../global/FixHeader.vue";
 import { mapState, mapGetters } from "vuex";
 export default {
     name: "navbar",
+    data() {
+        return {
+            showProfileMenu: false
+        };
+    },
     components: { FixHeader },
     computed: {
-        ...mapGetters(["the_token"])
+        ...mapGetters(["the_token", "the_bridge_user"])
+        // bridge_user() {
+        //     return JSON.parse(this.the_bridge_user) || null;
+        // }
     },
     methods: {
+        toggleProfileMenu(event) {
+            event.stopPropagation();
+            this.showProfileMenu = !this.showProfileMenu;
+        },
         async logout() {
             console.log("login out");
             const token = this.the_token;
             await this.$store.dispatch("logout", token);
-            console.log("new access_token ===>> ", this.the_token);
+            console.log("new bridge_user ===>> ", this.the_bridge_user);
             this.$router.push("/");
         }
     },
@@ -84,9 +114,19 @@ export default {
     }
 };
 </script>
-<style>
+<style lang="scss">
 .active {
     display: flex;
     flex-direction: column;
+}
+.header-profil-ul {
+    li {
+        &:hover {
+            color: #0077ff;
+        }
+        a {
+            transition: 0.3s;
+        }
+    }
 }
 </style>

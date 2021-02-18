@@ -7,7 +7,8 @@ const store = new Vuex.Store({
     state: {
         count: 0,
         token: '',
-        products: []
+        products: [],
+        user: null
     },
     mutations: {
         INCREMENT(state) {
@@ -16,6 +17,17 @@ const store = new Vuex.Store({
         SET_TOKEN(state, token) {
             state.token = token
             localStorage.setItem("access_token", token)
+        },
+        SET_USER(state, user) {
+            state.user = user
+            let my_user = JSON.stringify(user)
+            localStorage.setItem("bridge_user", my_user)
+        },
+        REMOVE_USER(state) {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("bridge_user");
+            state.user = null;
+            state.token = null;
         },
         SET_PRODUCTS(state, products) {
             state.products = products;
@@ -124,6 +136,7 @@ const store = new Vuex.Store({
                         if (!response.data.user) {
                             console.log("logout response ===>> ", response)
                             commit("SET_TOKEN", '')
+                            commit("REMOVE_USER")
                         }
                         resolve(response);
                     })
@@ -135,11 +148,14 @@ const store = new Vuex.Store({
 
         },
         async login({ commit }, params) {
+            console.log("Login ....................................");
             return new Promise((resolve, reject) => {
                 axios.post(`/api/login`, params)
                     .then((response) => {
-                        console.log(response)
+                        console.log("login response.data.user")
+                        console.log(response.data.user)
                         commit("SET_TOKEN", response.data.token)
+                        commit("SET_USER", response.data.user)
                         resolve(response);
                     })
                     .catch((error) => {
@@ -155,6 +171,7 @@ const store = new Vuex.Store({
                     .then((response) => {
                         console.log(response)
                         commit("SET_TOKEN", response.data.token)
+                        commit("SET_USER", response.data.user)
                         resolve(response);
                     })
                     .catch((error) => {
@@ -169,6 +186,7 @@ const store = new Vuex.Store({
     },
     getters: {
         the_token: state => state.token || localStorage.getItem("access_token"),
+        the_bridge_user: state => state.user || JSON.parse(localStorage.getItem("bridge_user")),
         products_list: state => state.products,
     }
 })
