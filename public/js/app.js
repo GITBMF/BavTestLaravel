@@ -2191,6 +2191,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -2202,7 +2204,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       name: "",
       price: 0,
       ismodal: false,
-      onEditId: null
+      onEditId: null,
+      onsubmition: false
     };
   },
   components: {
@@ -2212,6 +2215,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(["the_token", "products_list"])),
   methods: {
+    onlyNumber: function onlyNumber($event) {
+      //console.log($event.keyCode); //keyCodes value
+      var keyCode = $event.keyCode ? $event.keyCode : $event.which;
+
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        // 46 is dot
+        $event.preventDefault();
+      }
+    },
     closeModal: function closeModal() {
       this.ismodal = false;
     },
@@ -2251,21 +2263,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                _this2.onsubmition = true;
                 req = {
                   id: _this2.onEditId,
                   name: _this2.name,
                   price: _this2.price
                 };
-                _context2.next = 3;
+                _context2.next = 4;
                 return _this2.$store.dispatch("updateProduct", req);
 
-              case 3:
+              case 4:
                 _this2.ismodal = false;
+                _this2.onsubmition = false;
                 _this2.name = "";
                 _this2.price = 0;
                 _this2.onEditId = null;
 
-              case 7:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -2282,20 +2296,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
+                _this3.onsubmition = true;
                 req = {
                   name: _this3.name,
                   price: _this3.price
                 };
-                _context3.next = 3;
+                _context3.next = 4;
                 return _this3.$store.dispatch("addProduct", req);
 
-              case 3:
+              case 4:
                 _this3.ismodal = false;
+                _this3.onsubmition = false;
                 _this3.name = "";
                 _this3.price = 0;
                 console.log("new access_token ===>> ", _this3.the_token);
 
-              case 7:
+              case 9:
               case "end":
                 return _context3.stop();
             }
@@ -3238,7 +3254,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
               case 0:
                 commit = _ref.commit;
                 return _context.abrupt("return", new Promise(function (resolve, reject) {
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/deleteProduct/".concat(id), {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().delete("/api/deleteProduct/".concat(id), {
                     headers: {
                       'Content-Type': 'application/json',
                       Authorization: "Bearer ".concat(localStorage.getItem("access_token"))
@@ -3270,7 +3286,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
               case 0:
                 commit = _ref2.commit;
                 return _context2.abrupt("return", new Promise(function (resolve, reject) {
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/editProducts/".concat(product.id), product, {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/editProducts/".concat(product.id), product, {
                     headers: {
                       'Content-Type': 'application/json',
                       Authorization: "Bearer ".concat(localStorage.getItem("access_token"))
@@ -3366,9 +3382,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
               case 0:
                 commit = _ref5.commit;
                 return _context5.abrupt("return", new Promise(function (resolve, reject) {
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/logout", {
-                    token: token
-                  }, {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/logout?token=".concat(token.token), {
                     headers: {
                       'Content-Type': 'application/json',
                       Authorization: "Bearer ".concat(token.token)
@@ -3405,7 +3419,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
                 commit = _ref6.commit;
                 console.log("Login ....................................");
                 return _context6.abrupt("return", new Promise(function (resolve, reject) {
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/login", params).then(function (response) {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/login?email=".concat(params.email, "&password=").concat(params.password)).then(function (response) {
                     console.log("login response.data.user");
                     console.log(response.data.user);
                     commit("SET_TOKEN", response.data.token);
@@ -41341,13 +41355,14 @@ var render = function() {
                             ],
                             staticClass: "rounded-sm p-2",
                             attrs: {
-                              type: "number",
+                              type: "text",
                               min: "0",
                               name: "price",
                               id: ""
                             },
                             domProps: { value: _vm.price },
                             on: {
+                              keypress: _vm.onlyNumber,
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
@@ -41384,7 +41399,10 @@ var render = function() {
                               "button",
                               {
                                 staticClass: "rounded px-3 py-1 bg-blue-600",
-                                attrs: { type: "submit" }
+                                attrs: {
+                                  type: "submit",
+                                  disabled: _vm.onsubmition
+                                }
                               },
                               [
                                 _vm._v(

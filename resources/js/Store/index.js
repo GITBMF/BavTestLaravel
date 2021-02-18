@@ -48,7 +48,7 @@ const store = new Vuex.Store({
     actions: {
         async deleteProduct({ commit }, id) {
             return new Promise((resolve, reject) => {
-                axios.post(`/api/deleteProduct/${id}`, {
+                axios.delete(`/api/deleteProduct/${id}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${localStorage.getItem("access_token")}`
@@ -67,7 +67,7 @@ const store = new Vuex.Store({
         },
         async updateProduct({ commit }, product) {
             return new Promise((resolve, reject) => {
-                axios.post(`/api/editProducts/${product.id}`, product, {
+                axios.put(`/api/editProducts/${product.id}`, product, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${localStorage.getItem("access_token")}`
@@ -125,7 +125,7 @@ const store = new Vuex.Store({
         async logout({ commit }, token) {
 
             return new Promise((resolve, reject) => {
-                axios.post(`/api/logout`, { token }, {
+                axios.get(`/api/logout?token=${ token.token }`, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${token.token}`
@@ -150,7 +150,7 @@ const store = new Vuex.Store({
         async login({ commit }, params) {
             console.log("Login ....................................");
             return new Promise((resolve, reject) => {
-                axios.post(`/api/login`, params)
+                axios.get(`/api/login?email=${params.email}&password=${params.password}`)
                     .then((response) => {
                         console.log("login response.data.user")
                         console.log(response.data.user)

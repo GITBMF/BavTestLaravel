@@ -14,6 +14,27 @@ class ProductsModelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     * @OA\Get(
+     *      path="/api/products",
+     *      operationId="getProductsList",
+     *      tags={"Products"},
+     *      summary="Get list of products",
+     *      description="Returns list of products",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
     public function index()
     {
         $products = ProductsModel::all();
@@ -38,6 +59,53 @@ class ProductsModelController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     */
+    /**
+     * @OA\Post(
+     *      path="/api/storeProduct",
+     *      operationId="createProduct",
+     *      tags={"Products"},
+     *      summary="Create Product",
+     *      description="Returns created Product data",
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="Product name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="price",
+     *          description="Product price",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=202,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function store(Request $request)
     {
@@ -81,6 +149,62 @@ class ProductsModelController extends Controller
      * @param  \App\Models\ProductsModel  $productsModel
      * @return \Illuminate\Http\Response
      */
+    /**
+     * @OA\Put(
+     *      path="/api/editProducts/{id}",
+     *      operationId="editProduct",
+     *      tags={"Products"},
+     *      summary="Update Product",
+     *      description="Returns updated Product data",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Product id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="Product name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="price",
+     *          description="Product price",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=202,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
+     */
     public function edit(Request $request, $id)
     {
         $validator = Validator::make($request->all(), 
@@ -95,6 +219,11 @@ class ProductsModelController extends Controller
 
             }  
         $product = ProductsModel::find($id);
+        if(!$product){
+            return response()->json([
+            'success' => false,
+        ], Response::HTTP_NOT_FOUND);
+        }
         $product->name = $request->name;
         $product->price = $request->price;
         $product->save();
@@ -122,6 +251,42 @@ class ProductsModelController extends Controller
      *
      * @param  \App\Models\ProductsModel  $productsModel
      * @return \Illuminate\Http\Response
+     */
+
+    /**
+     * @OA\Delete(
+     *      path="/api/deleteProduct/{id}",
+     *      operationId="deleteProduct",
+     *      tags={"Products"},
+     *      summary="Delete existing Product",
+     *      description="Deletes a record and returns no content",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Product id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function destroy($id)
     {

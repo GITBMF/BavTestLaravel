@@ -24,10 +24,11 @@
                             <label for="price">Price</label>
                             <input
                                 class="rounded-sm p-2"
-                                type="number"
+                                type="text"
                                 min="0"
                                 name="price"
                                 v-model="price"
+                                @keypress="onlyNumber"
                                 id=""
                             />
                         </div>
@@ -43,6 +44,7 @@
                                 <button
                                     class="rounded px-3 py-1 bg-blue-600"
                                     type="submit"
+                                    :disabled="onsubmition"
                                 >
                                     Save
                                 </button>
@@ -89,7 +91,8 @@ export default {
             name: "",
             price: 0,
             ismodal: false,
-            onEditId: null
+            onEditId: null,
+            onsubmition: false
         };
     },
     components: {
@@ -101,6 +104,14 @@ export default {
         ...mapGetters(["the_token", "products_list"])
     },
     methods: {
+        onlyNumber($event) {
+            //console.log($event.keyCode); //keyCodes value
+            let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+            if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+                // 46 is dot
+                $event.preventDefault();
+            }
+        },
         closeModal() {
             this.ismodal = false;
         },
@@ -116,6 +127,7 @@ export default {
             await this.$store.dispatch("deleteProduct", $id);
         },
         async editProduct() {
+            this.onsubmition = true;
             const req = {
                 id: this.onEditId,
                 name: this.name,
@@ -123,17 +135,20 @@ export default {
             };
             await this.$store.dispatch("updateProduct", req);
             this.ismodal = false;
+            this.onsubmition = false;
             this.name = "";
             this.price = 0;
             this.onEditId = null;
         },
         async addProduct() {
+            this.onsubmition = true;
             const req = {
                 name: this.name,
                 price: this.price
             };
             await this.$store.dispatch("addProduct", req);
             this.ismodal = false;
+            this.onsubmition = false;
             this.name = "";
             this.price = 0;
             console.log("new access_token ===>> ", this.the_token);

@@ -19,6 +19,71 @@ class JwtAuthController extends Controller
 {
     public $token = true;
 
+    /**
+     * @OA\Post(
+     *      path="/api/register",
+     *      operationId="createUser",
+     *      tags={"Users"},
+     *      summary="Create User",
+     *      description="Returns created User data",
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="User name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="email",
+     *          description="User e-mail",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="password",
+     *          description="Password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="c_password",
+     *          description="Password confirmation",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=202,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
+     */
     public function register(Request $request)
     {
 
@@ -53,6 +118,45 @@ class JwtAuthController extends Controller
         ], Response::HTTP_OK);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/login",
+     *      operationId="authenticateUser",
+     *      tags={"Users"},
+     *      summary="Get user authorization token",
+     *      description="Returns authenticate user",
+     *      @OA\Parameter(
+     *          name="email",
+     *          description="User e-mail",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="password",
+     *          description="Password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
     public function login(Request $request)
     {
         $input = $request->only('email', 'password');
@@ -72,6 +176,36 @@ class JwtAuthController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/logout",
+     *      operationId="logginOutUser",
+     *      tags={"Users"},
+     *      summary="Destroy user authorization token",
+     *      description="Returns no content",
+     *      @OA\Parameter(
+     *          name="token",
+     *          description="User authorization token",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
     public function logout(Request $request)
     {
         $this->validate($request, [

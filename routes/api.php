@@ -18,18 +18,21 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('login', 'JwtAuthController@login');
+Route::get('login', 'JwtAuthController@login');
 Route::post('register', 'JwtAuthController@register');
 
-Route::post('logout', 'JwtAuthController@logout');
 
 
 Route::group(['middleware' => 'auth.jwt'], function () {
+    Route::get('logout', 'JwtAuthController@logout');
+    // Users
+    Route::get('/users', 'UsersController@index');
+    Route::delete('/deleteUser/{id}', 'UsersController@destroy');
     // Products
     Route::post('/storeProduct','ProductsModelController@store');
     Route::get('/products', 'ProductsModelController@index');
-    Route::post('/deleteProduct/{id}', 'ProductsModelController@destroy');
-    Route::post('/editProducts/{id}', 'ProductsModelController@edit');
+    Route::delete('/deleteProduct/{id}', 'ProductsModelController@destroy');
+    Route::put('/editProducts/{id}', 'ProductsModelController@edit');
 
     Route::get('user-info', 'JwtAuthController@getUser');
     
