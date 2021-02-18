@@ -1,15 +1,13 @@
 <template>
     <div @click.self="ismodal = false" class="the-home px-12 w-full h-screen">
         <div class="h-28"></div>
-        <button
-            v-if="!ismodal"
-            class="bg-blue-500 rounded p-3"
-            @click="ismodal = true"
-        >
+        <button class="bg-blue-500 rounded p-3" @click="ismodal = true">
             Add product
         </button>
-        <modal v-if="ismodal">
-            <div class="max-w-sm justify-center mt-4 bg-gray-300 rounded-2xl">
+        <modal v-if="ismodal" @closeMe="closeModal()">
+            <div
+                class="max-w-sm max-h-60 flex justify-center items-center z-20 mt-40 bg-gray-300 rounded-2xl"
+            >
                 <form @submit.prevent="onEditId ? editProduct() : addProduct()">
                     <div class="p-6 grid grid-rows-3 gap-4">
                         <div class="grid grid-cols-2">
@@ -54,17 +52,17 @@
                 </form>
             </div>
         </modal>
-        <div class="mt-5 space-y-3" v-if="!ismodal">
+        <div class="mt-5 space-y-3">
             <div
                 class="w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-5"
             >
                 <div>ID</div>
                 <div>NAME</div>
                 <div>PRICE</div>
-                <div>
+                <div class="flex justify-center items-center">
                     EDIT
                 </div>
-                <div class="">
+                <div class="flex justify-center items-center">
                     DELETE
                 </div>
             </div>
@@ -103,6 +101,9 @@ export default {
         ...mapGetters(["the_token", "products_list"])
     },
     methods: {
+        closeModal() {
+            this.ismodal = false;
+        },
         toggleEdit($product) {
             console.log(this.onEditId);
             this.name = $product.name;

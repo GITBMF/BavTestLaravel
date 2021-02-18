@@ -32,7 +32,7 @@ grid-cols-1 md:flex md:flex-row md:justify-between items-center"
                     "
                     to="/products"
                     class="text-black hover:text-white px-3 rounded py-1"
-                    >Product</router-link
+                    >Products</router-link
                 >
                 <div
                     @click="logout"

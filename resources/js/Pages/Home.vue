@@ -1,6 +1,6 @@
 <template>
     <div class="the-home w-full h-screen">
-        <div class="h-28"></div>
+        <div class=""></div>
         <div
             v-if="isLogin"
             class="w-full h-full px-12 flex justify-center items-center"
@@ -115,6 +115,7 @@ export default {
                 c_password: this.c_password
             };
             await this.$store.dispatch("register", req);
+            this.$router.push("/products");
         }
     },
     mounted() {

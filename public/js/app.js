@@ -2065,6 +2065,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _this2.$store.dispatch("register", req);
 
               case 3:
+                _this2.$router.push("/products");
+
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -2188,8 +2191,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -2211,6 +2212,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(["the_token", "products_list"])),
   methods: {
+    closeModal: function closeModal() {
+      this.ismodal = false;
+    },
     toggleEdit: function toggleEdit($product) {
       console.log(this.onEditId);
       this.name = $product.name;
@@ -2391,6 +2395,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "modal",
   data: function data() {
@@ -2399,6 +2408,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    closeModal: function closeModal() {
+      this.$emit("closeMe");
+    },
     toggleModal: function toggleModal() {
       this.modal = !this.modal;
     }
@@ -40936,7 +40948,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "the-home w-full h-screen" }, [
-    _c("div", { staticClass: "h-28" }),
+    _c("div", {}),
     _vm._v(" "),
     _vm.isLogin
       ? _c(
@@ -41198,165 +41210,171 @@ var render = function() {
     [
       _c("div", { staticClass: "h-28" }),
       _vm._v(" "),
-      !_vm.ismodal
+      _c(
+        "button",
+        {
+          staticClass: "bg-blue-500 rounded p-3",
+          on: {
+            click: function($event) {
+              _vm.ismodal = true
+            }
+          }
+        },
+        [_vm._v("\n        Add product\n    ")]
+      ),
+      _vm._v(" "),
+      _vm.ismodal
         ? _c(
-            "button",
+            "modal",
             {
-              staticClass: "bg-blue-500 rounded p-3",
               on: {
-                click: function($event) {
-                  _vm.ismodal = true
+                closeMe: function($event) {
+                  return _vm.closeModal()
                 }
               }
             },
-            [_vm._v("\n        Add product\n    ")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.ismodal
-        ? _c("modal", [
-            _c(
-              "div",
-              {
-                staticClass:
-                  "max-w-sm justify-center mt-4 bg-gray-300 rounded-2xl"
-              },
-              [
-                _c(
-                  "form",
-                  {
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        _vm.onEditId ? _vm.editProduct() : _vm.addProduct()
+            [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "max-w-sm max-h-60 flex justify-center items-center z-20 mt-40 bg-gray-300 rounded-2xl"
+                },
+                [
+                  _c(
+                    "form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          _vm.onEditId ? _vm.editProduct() : _vm.addProduct()
+                        }
                       }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "p-6 grid grid-rows-3 gap-4" }, [
-                      _c("div", { staticClass: "grid grid-cols-2" }, [
-                        _c("label", { attrs: { for: "name" } }, [
-                          _vm._v("Name")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.name,
-                              expression: "name"
-                            }
-                          ],
-                          staticClass: "rounded-sm p-2",
-                          attrs: { type: "text", name: "name", id: "" },
-                          domProps: { value: _vm.name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.name = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "grid grid-cols-2" }, [
-                        _c("label", { attrs: { for: "price" } }, [
-                          _vm._v("Price")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.price,
-                              expression: "price"
-                            }
-                          ],
-                          staticClass: "rounded-sm p-2",
-                          attrs: {
-                            type: "number",
-                            min: "0",
-                            name: "price",
-                            id: ""
-                          },
-                          domProps: { value: _vm.price },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.price = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "grid grid-cols-2" }, [
-                        _c("div"),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "flex justify-between" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "rounded px-3 py-1 mr-3 border border-red-400 hover:bg-red-400",
-                              on: {
-                                click: function($event) {
-                                  _vm.ismodal = false
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Cancel\n                            "
-                              )
-                            ]
-                          ),
+                    },
+                    [
+                      _c("div", { staticClass: "p-6 grid grid-rows-3 gap-4" }, [
+                        _c("div", { staticClass: "grid grid-cols-2" }, [
+                          _c("label", { attrs: { for: "name" } }, [
+                            _vm._v("Name")
+                          ]),
                           _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "rounded px-3 py-1 bg-blue-600",
-                              attrs: { type: "submit" }
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.name,
+                                expression: "name"
+                              }
+                            ],
+                            staticClass: "rounded-sm p-2",
+                            attrs: { type: "text", name: "name", id: "" },
+                            domProps: { value: _vm.name },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.name = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "grid grid-cols-2" }, [
+                          _c("label", { attrs: { for: "price" } }, [
+                            _vm._v("Price")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.price,
+                                expression: "price"
+                              }
+                            ],
+                            staticClass: "rounded-sm p-2",
+                            attrs: {
+                              type: "number",
+                              min: "0",
+                              name: "price",
+                              id: ""
                             },
-                            [
-                              _vm._v(
-                                "\n                                Save\n                            "
-                              )
-                            ]
-                          )
+                            domProps: { value: _vm.price },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.price = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "grid grid-cols-2" }, [
+                          _c("div"),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex justify-between" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "rounded px-3 py-1 mr-3 border border-red-400 hover:bg-red-400",
+                                on: {
+                                  click: function($event) {
+                                    _vm.ismodal = false
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Cancel\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "rounded px-3 py-1 bg-blue-600",
+                                attrs: { type: "submit" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Save\n                            "
+                                )
+                              ]
+                            )
+                          ])
                         ])
                       ])
-                    ])
-                  ]
-                )
-              ]
-            )
-          ])
+                    ]
+                  )
+                ]
+              )
+            ]
+          )
         : _vm._e(),
       _vm._v(" "),
-      !_vm.ismodal
-        ? _c(
-            "div",
-            { staticClass: "mt-5 space-y-3" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm._l(_vm.products_list, function(product) {
-                return _c("row-list", {
-                  key: product.id,
-                  attrs: { product: product },
-                  on: { edit: _vm.toggleEdit, deleteProduct: _vm.removeProduct }
-                })
-              })
-            ],
-            2
-          )
-        : _vm._e()
+      _c(
+        "div",
+        { staticClass: "mt-5 space-y-3" },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.products_list, function(product) {
+            return _c("row-list", {
+              key: product.id,
+              attrs: { product: product },
+              on: { edit: _vm.toggleEdit, deleteProduct: _vm.removeProduct }
+            })
+          })
+        ],
+        2
+      )
     ],
     1
   )
@@ -41379,9 +41397,13 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("div", [_vm._v("PRICE")]),
         _vm._v(" "),
-        _c("div", [_vm._v("\n                EDIT\n            ")]),
+        _c("div", { staticClass: "flex justify-center items-center" }, [
+          _vm._v("\n                EDIT\n            ")
+        ]),
         _vm._v(" "),
-        _c("div", {}, [_vm._v("\n                DELETE\n            ")])
+        _c("div", { staticClass: "flex justify-center items-center" }, [
+          _vm._v("\n                DELETE\n            ")
+        ])
       ]
     )
   }
@@ -41458,9 +41480,27 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "flex justify-center" },
-    [_vm._t("default")],
-    2
+    { staticClass: "flex justify-center " },
+    [
+      _c(
+        "dir",
+        {
+          staticClass:
+            "flex justify-center items-start h-screen w-screen shadow-lg fixed top-0 left-0 z-10 vh-100 bg-black bg-opacity-30",
+          on: {
+            click: function($event) {
+              if ($event.target !== $event.currentTarget) {
+                return null
+              }
+              return _vm.closeModal()
+            }
+          }
+        },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -41494,11 +41534,15 @@ var render = function() {
     [
       _c("div", [_vm._v(_vm._s(_vm.product.id))]),
       _vm._v(" "),
-      _c("div", [_vm._v(_vm._s(_vm.product.name))]),
+      _c("div", { staticClass: "overflow-hidden" }, [
+        _vm._v(_vm._s(_vm.product.name))
+      ]),
       _vm._v(" "),
-      _c("div", [_vm._v(_vm._s(_vm.product.price))]),
+      _c("div", { staticClass: "overflow-hidden" }, [
+        _vm._v(_vm._s(_vm.product.price))
+      ]),
       _vm._v(" "),
-      _c("div", [
+      _c("div", { staticClass: "flex justify-center items-center" }, [
         _c("i", {
           staticClass: "cursor-pointer fas fa-eraser",
           on: {
@@ -41510,7 +41554,7 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("div", {}, [
+      _c("div", { staticClass: "flex justify-center items-center" }, [
         _c("i", {
           staticClass: "cursor-pointer fas fa-trash",
           on: {
@@ -41905,7 +41949,7 @@ var render = function() {
                       "text-black hover:text-white px-3 rounded py-1",
                     attrs: { to: "/products" }
                   },
-                  [_vm._v("Product")]
+                  [_vm._v("Products")]
                 )
               : _vm._e(),
             _vm._v(" "),
