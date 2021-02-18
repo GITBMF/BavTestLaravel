@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use AppUser;
 use IlluminateHttpRequest;
 use AppHttpRequestsRegisterAuthRequest;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use SymfonyComponentHttpFoundationResponse;
@@ -66,28 +68,29 @@ class JwtAuthController extends Controller
         return response()->json([
             'success' => true,
             'token' => $jwt_token,
+            'user' => Auth::user()
         ]);
     }
 
     public function logout(Request $request)
     {
-        return response()->json([
-                'success' => true,
-                'data' => $request->token,
-                'data1' => $request->all()
-            ]);
         $this->validate($request, [
             'token' => 'required'
         ]);
         
         try {
-            JWTAuth::invalidate($request->token);
-
+            // dd(JWTAuth::getToken());
+            // JWTAuth::invalidate($request->token);
+            // auth()->logout();
+            Auth::logout();
+            $user = Auth::user();
             return response()->json([
                 'success' => true,
+                'user' => $user,
                 'message' => 'User logged out successfully'
             ]);
         } catch (JWTException $exception) {
+            dump($exception);
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, the user cannot be logged out'

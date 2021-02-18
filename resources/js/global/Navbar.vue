@@ -25,14 +25,22 @@ grid-cols-1 md:flex md:flex-row md:justify-between items-center"
                 id="mobileMenu"
             >
                 <router-link
-                    v-if="the_token != 'null'"
+                    v-if="
+                        this.the_token != '' &&
+                            this.the_token != null &&
+                            this.the_token != undefined
+                    "
                     to="/products"
                     class="text-black hover:text-white px-3 rounded py-1"
                     >Product</router-link
                 >
                 <div
                     @click="logout"
-                    v-if="the_token != 'null'"
+                    v-if="
+                        this.the_token != '' &&
+                            this.the_token != null &&
+                            this.the_token != undefined
+                    "
                     class="text-black hover:text-white px-3 rounded py-1"
                 >
                     Logout
@@ -59,10 +67,8 @@ export default {
     methods: {
         async logout() {
             console.log("login out");
-            const req = {
-                token: this.the_token
-            };
-            await this.$store.dispatch("logout", req);
+            const token = this.the_token;
+            await this.$store.dispatch("logout", token);
             console.log("new access_token ===>> ", this.the_token);
             this.$router.push("/");
         }

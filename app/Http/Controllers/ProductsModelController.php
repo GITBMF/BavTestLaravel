@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductsModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductsModelController extends Controller
@@ -15,9 +16,10 @@ class ProductsModelController extends Controller
      */
     public function index()
     {
+        $products = ProductsModel::all();
         return response()->json([
             'success' => true,
-            'data' => "ok"
+            'data' => $products
         ], Response::HTTP_OK);
     }
 
@@ -39,7 +41,27 @@ class ProductsModelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), 
+                      [ 
+                      'name' => 'required',
+                      'price' => 'required',
+                     ]);  
+
+         if ($validator->fails()) {  
+
+               return response()->json(['error'=>$validator->errors()], 401); 
+
+            }  
+        $product = new ProductsModel();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => $product
+        ], Response::HTTP_OK);
+
     }
 
     /**
@@ -59,9 +81,28 @@ class ProductsModelController extends Controller
      * @param  \App\Models\ProductsModel  $productsModel
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductsModel $productsModel)
+    public function edit(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), 
+                      [ 
+                      'name' => 'required',
+                      'price' => 'required',
+                     ]);  
+
+         if ($validator->fails()) {  
+
+               return response()->json(['error'=>$validator->errors()], 401); 
+
+            }  
+        $product = ProductsModel::find($id);
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => $product
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -82,8 +123,17 @@ class ProductsModelController extends Controller
      * @param  \App\Models\ProductsModel  $productsModel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductsModel $productsModel)
+    public function destroy($id)
     {
-        //
+        $product = ProductsModel::find($id);
+        if(!$product){
+            return response()->json([
+            'success' => false,
+        ], Response::HTTP_NOT_FOUND);
+        }
+        $product->delete();
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
     }
 }

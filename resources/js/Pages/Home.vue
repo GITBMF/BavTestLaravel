@@ -103,7 +103,7 @@ export default {
                 email: this.email,
                 password: this.password
             };
-            await this.$store.dispatch("login", req);
+            await this.$store.dispatch("login", req).then("");
             console.log("new access_token ===>> ", this.the_token);
             this.$router.push("/products");
         },

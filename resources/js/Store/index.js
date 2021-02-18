@@ -6,7 +6,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         count: 0,
-        token: null
+        token: '',
+        products: []
     },
     mutations: {
         INCREMENT(state) {
@@ -15,21 +16,115 @@ const store = new Vuex.Store({
         SET_TOKEN(state, token) {
             state.token = token
             localStorage.setItem("access_token", token)
-        }
+        },
+        SET_PRODUCTS(state, products) {
+            state.products = products;
+        },
+        SET_PRODUCT(state, product) {
+            state.products.unshift(product)
+        },
+        UPDATE_PRODUCT(state, product) {
+            const idx = state.products.findIndex((elt) => elt.id == product.id)
+            state.products.splice(idx, 1, product)
+
+        },
+        DELETE_PRODUCT(state, id) {
+            const idx = state.products.findIndex((elt) => elt.id == id)
+            state.products.splice(idx, 1)
+        },
     },
     actions: {
-        async logout({ commit }, token) {
-            console.log("login out token ==>> ", token.token);
+        async deleteProduct({ commit }, id) {
             return new Promise((resolve, reject) => {
-                axios.get(`/api/logout`, token, {
+                axios.post(`/api/deleteProduct/${id}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log(response)
+                        commit("DELETE_PRODUCT", id)
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log("logout error ==>> ", error)
+                        reject(error)
+                    })
+            })
+        },
+        async updateProduct({ commit }, product) {
+            return new Promise((resolve, reject) => {
+                axios.post(`/api/editProducts/${product.id}`, product, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log(response)
+                        commit("UPDATE_PRODUCT", response.data.data)
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log("logout error ==>> ", error)
+                        reject(error)
+                    })
+            })
+        },
+        async addProduct({ commit }, product) {
+            return new Promise((resolve, reject) => {
+                axios.post(`/api/storeProduct`, product, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log(response)
+                        commit("SET_PRODUCT", response.data.data)
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log("logout error ==>> ", error)
+                        reject(error)
+                    })
+            })
+        },
+        async fetchProducts({ commit }) {
+            return new Promise((resolve, reject) => {
+                axios.get(`/api/products`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log(response)
+                        commit("SET_PRODUCTS", response.data.data)
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log("logout error ==>> ", error)
+                        reject(error)
+                    })
+            })
+        },
+        async logout({ commit }, token) {
+
+            return new Promise((resolve, reject) => {
+                axios.post(`/api/logout`, { token }, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${token.token}`
                         }
                     })
                     .then((response) => {
-                        console.log(response)
-                        commit("SET_TOKEN", null)
+
+                        if (!response.data.user) {
+                            console.log("logout response ===>> ", response)
+                            commit("SET_TOKEN", '')
+                        }
                         resolve(response);
                     })
                     .catch((error) => {
@@ -74,6 +169,7 @@ const store = new Vuex.Store({
     },
     getters: {
         the_token: state => state.token || localStorage.getItem("access_token"),
+        products_list: state => state.products,
     }
 })
 

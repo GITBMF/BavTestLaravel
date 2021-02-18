@@ -21,8 +21,16 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'JwtAuthController@login');
 Route::post('register', 'JwtAuthController@register');
 
-Route::group(['middleware' => 'jwt.auth'], function () {
+Route::post('logout', 'JwtAuthController@logout');
 
-    Route::get('logout', 'JwtAuthController@logout');
+
+Route::group(['middleware' => 'auth.jwt'], function () {
+    // Products
+    Route::post('/storeProduct','ProductsModelController@store');
+    Route::get('/products', 'ProductsModelController@index');
+    Route::post('/deleteProduct/{id}', 'ProductsModelController@destroy');
+    Route::post('/editProducts/{id}', 'ProductsModelController@edit');
+
     Route::get('user-info', 'JwtAuthController@getUser');
+    
 });
