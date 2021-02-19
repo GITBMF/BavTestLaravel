@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/storeProduct','ProductsModelController@store');
     Route::get('/products', 'ProductsModelController@index');
     Route::delete('/deleteProduct/{id}', 'ProductsModelController@destroy');
-    Route::put('/editProducts/{id}', 'ProductsModelController@edit');
+    Route::post('/editProducts/{id}', 'ProductsModelController@edit');
 
     Route::get('user-info', 'JwtAuthController@getUser');
     

@@ -65,11 +65,11 @@ const store = new Vuex.Store({
                     })
             })
         },
-        async updateProduct({ commit }, product) {
+        async updateProduct({ commit }, { id, formData }) {
             return new Promise((resolve, reject) => {
-                axios.put(`/api/editProducts/${product.id}`, product, {
+                axios.post(`/api/editProducts/${id}`, formData, {
                         headers: {
-                            'Content-Type': 'application/json',
+                            "Content-Type": "multipart/form-data",
                             Authorization: `Bearer ${localStorage.getItem("access_token")}`
                         }
                     })
@@ -88,7 +88,7 @@ const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.post(`/api/storeProduct`, product, {
                         headers: {
-                            'Content-Type': 'application/json',
+                            "Content-Type": "multipart/form-data",
                             Authorization: `Bearer ${localStorage.getItem("access_token")}`
                         }
                     })

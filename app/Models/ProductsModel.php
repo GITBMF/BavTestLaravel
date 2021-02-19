@@ -11,4 +11,6 @@ class ProductsModel extends Model
     protected $table = "products_models";
     public $timestamps = true;
     protected $fillable = ["name", "price"];
+
+    const PRODUCT_STORAGE = "/storage/products/";
 }

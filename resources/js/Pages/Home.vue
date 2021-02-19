@@ -1,5 +1,5 @@
 <template>
-    <div class="the-home w-full h-screen">
+    <div class="the-home w-full h-full">
         <div class=""></div>
         <div
             v-if="isLogin"

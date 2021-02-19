@@ -2,7 +2,7 @@
     <div class="flex justify-center ">
         <dir
             @click.self="closeModal()"
-            class="flex justify-center items-start h-screen w-screen shadow-lg fixed top-0 left-0 z-10 vh-100 bg-black bg-opacity-30"
+            class="flex justify-center overflow-scroll items-start h-screen w-screen shadow-lg fixed top-0 left-0 z-10 vh-100 bg-black bg-opacity-30"
         >
             <slot />
         </dir>

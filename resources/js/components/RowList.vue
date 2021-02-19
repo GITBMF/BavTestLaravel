@@ -1,7 +1,13 @@
 <template>
-    <div class="w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-5">
+    <div
+        class="w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-7 gap-3"
+    >
         <div>{{ product.id }}</div>
         <div class="overflow-hidden">{{ product.name }}</div>
+        <div class="overflow-hidden">{{ product.description }}</div>
+        <div class="overflow-hidden">
+            <a :href="product.picture">{{ product.picture }}</a>
+        </div>
         <div class="overflow-hidden">{{ product.price }}</div>
         <div class="flex justify-center items-center">
             <i @click.prevent="edit()" class="cursor-pointer fas fa-eraser"></i>

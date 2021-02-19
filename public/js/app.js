@@ -2193,6 +2193,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2202,6 +2229,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       name: "",
+      description: "",
+      picture: null,
       price: 0,
       ismodal: false,
       onEditId: null,
@@ -2215,6 +2244,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(["the_token", "products_list"])),
   methods: {
+    imChanged: function imChanged(event) {
+      var file = event.target.files[0];
+      this.picture = file;
+      console.log("this.picture ===>>> ", this.picture);
+    },
     onlyNumber: function onlyNumber($event) {
       //console.log($event.keyCode); //keyCodes value
       var keyCode = $event.keyCode ? $event.keyCode : $event.which;
@@ -2231,6 +2265,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.onEditId);
       this.name = $product.name;
       this.price = $product.price;
+      this.description = $product.description;
+      this.picture = $product.picture;
       this.onEditId = $product.id;
       console.log(this.onEditId);
       this.ismodal = true;
@@ -2258,28 +2294,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var req;
+        var req, formData1;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.onsubmition = true;
                 req = {
-                  id: _this2.onEditId,
                   name: _this2.name,
+                  description: _this2.description,
+                  picture: _this2.picture,
                   price: _this2.price
                 };
-                _context2.next = 4;
-                return _this2.$store.dispatch("updateProduct", req);
+                formData1 = new FormData(); // formData1.append("id", this.onEditId);
 
-              case 4:
+                formData1.append("name", _this2.name);
+                formData1.append("description", _this2.description);
+                formData1.append("picture", _this2.picture);
+                formData1.append("price", _this2.price);
+                _context2.next = 9;
+                return _this2.$store.dispatch("updateProduct", {
+                  id: _this2.onEditId,
+                  formData: formData1
+                });
+
+              case 9:
                 _this2.ismodal = false;
                 _this2.onsubmition = false;
                 _this2.name = "";
                 _this2.price = 0;
+                _this2.description = "";
                 _this2.onEditId = null;
 
-              case 9:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -2291,7 +2338,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var req;
+        var req, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -2299,19 +2346,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this3.onsubmition = true;
                 req = {
                   name: _this3.name,
+                  description: _this3.description,
+                  picture: _this3.picture,
                   price: _this3.price
                 };
-                _context3.next = 4;
-                return _this3.$store.dispatch("addProduct", req);
+                formData = new FormData();
+                formData.append("name", _this3.name);
+                formData.append("description", _this3.description);
+                formData.append("picture", _this3.picture);
+                formData.append("price", _this3.price);
+                _context3.next = 9;
+                return _this3.$store.dispatch("addProduct", formData);
 
-              case 4:
+              case 9:
                 _this3.ismodal = false;
                 _this3.onsubmition = false;
                 _this3.name = "";
                 _this3.price = 0;
+                _this3.description = "";
                 console.log("new access_token ===>> ", _this3.the_token);
 
-              case 9:
+              case 15:
               case "end":
                 return _context3.stop();
             }
@@ -2446,6 +2501,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3277,18 +3338,19 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee);
       }))();
     },
-    updateProduct: function updateProduct(_ref2, product) {
+    updateProduct: function updateProduct(_ref2, _ref3) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var commit;
+        var commit, id, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 commit = _ref2.commit;
+                id = _ref3.id, formData = _ref3.formData;
                 return _context2.abrupt("return", new Promise(function (resolve, reject) {
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/editProducts/".concat(product.id), product, {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/editProducts/".concat(id), formData, {
                     headers: {
-                      'Content-Type': 'application/json',
+                      "Content-Type": "multipart/form-data",
                       Authorization: "Bearer ".concat(localStorage.getItem("access_token"))
                     }
                   }).then(function (response) {
@@ -3301,7 +3363,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
                   });
                 }));
 
-              case 2:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -3309,18 +3371,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee2);
       }))();
     },
-    addProduct: function addProduct(_ref3, product) {
+    addProduct: function addProduct(_ref4, product) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var commit;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                commit = _ref3.commit;
+                commit = _ref4.commit;
                 return _context3.abrupt("return", new Promise(function (resolve, reject) {
                   axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/storeProduct", product, {
                     headers: {
-                      'Content-Type': 'application/json',
+                      "Content-Type": "multipart/form-data",
                       Authorization: "Bearer ".concat(localStorage.getItem("access_token"))
                     }
                   }).then(function (response) {
@@ -3341,14 +3403,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee3);
       }))();
     },
-    fetchProducts: function fetchProducts(_ref4) {
+    fetchProducts: function fetchProducts(_ref5) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var commit;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                commit = _ref4.commit;
+                commit = _ref5.commit;
                 return _context4.abrupt("return", new Promise(function (resolve, reject) {
                   axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/products", {
                     headers: {
@@ -3373,14 +3435,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee4);
       }))();
     },
-    logout: function logout(_ref5, token) {
+    logout: function logout(_ref6, token) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         var commit;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                commit = _ref5.commit;
+                commit = _ref6.commit;
                 return _context5.abrupt("return", new Promise(function (resolve, reject) {
                   axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/logout?token=".concat(token.token), {
                     headers: {
@@ -3409,14 +3471,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee5);
       }))();
     },
-    login: function login(_ref6, params) {
+    login: function login(_ref7, params) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
         var commit;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                commit = _ref6.commit;
+                commit = _ref7.commit;
                 console.log("Login ....................................");
                 return _context6.abrupt("return", new Promise(function (resolve, reject) {
                   axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/login?email=".concat(params.email, "&password=").concat(params.password)).then(function (response) {
@@ -3439,14 +3501,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
         }, _callee6);
       }))();
     },
-    register: function register(_ref7, params) {
+    register: function register(_ref8, params) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
         var commit;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                commit = _ref7.commit;
+                commit = _ref8.commit;
                 return _context7.abrupt("return", new Promise(function (resolve, reject) {
                   axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/register", params).then(function (response) {
                     console.log(response);
@@ -40977,7 +41039,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container max-w-full max-h-full" },
+    { staticClass: "container max-w-full max-h-screen" },
     [_c("default-layout")],
     1
   )
@@ -41005,7 +41067,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "the-home w-full h-screen" }, [
+  return _c("div", { staticClass: "the-home w-full h-full" }, [
     _c("div", {}),
     _vm._v(" "),
     _vm.isLogin
@@ -41255,7 +41317,7 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "the-home px-12 w-full h-screen",
+      staticClass: "the-home px-12 pb-6 w-full h-full",
       on: {
         click: function($event) {
           if ($event.target !== $event.currentTarget) {
@@ -41296,7 +41358,7 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "max-w-sm max-h-60 flex justify-center items-center z-20 mt-40 bg-gray-300 rounded-2xl"
+                    "max-w-lg max-h-full flex justify-center items-center z-20 mt-14 bg-gray-300 rounded-2xl"
                 },
                 [
                   _c(
@@ -41310,7 +41372,7 @@ var render = function() {
                       }
                     },
                     [
-                      _c("div", { staticClass: "p-6 grid grid-rows-3 gap-4" }, [
+                      _c("div", { staticClass: "p-6 grid grid-rows-5 gap-4" }, [
                         _c("div", { staticClass: "grid grid-cols-2" }, [
                           _c("label", { attrs: { for: "name" } }, [
                             _vm._v("Name")
@@ -41325,7 +41387,7 @@ var render = function() {
                                 expression: "name"
                               }
                             ],
-                            staticClass: "rounded-sm p-2",
+                            staticClass: "rounded-xl p-2 h-7",
                             attrs: { type: "text", name: "name", id: "" },
                             domProps: { value: _vm.name },
                             on: {
@@ -41336,6 +41398,56 @@ var render = function() {
                                 _vm.name = $event.target.value
                               }
                             }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "grid grid-cols-2" }, [
+                          _c("label", { attrs: { for: "description" } }, [
+                            _vm._v("Description")
+                          ]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.description,
+                                expression: "description"
+                              }
+                            ],
+                            staticClass: "rounded-xl p-2 h-10",
+                            attrs: {
+                              type: "text",
+                              name: "description",
+                              id: ""
+                            },
+                            domProps: { value: _vm.description },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.description = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "grid grid-cols-2" }, [
+                          _c("label", { attrs: { for: "picture" } }, [
+                            _vm._v("Picture")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            ref: "imageUpload",
+                            staticClass: "rounded-xl p-2",
+                            attrs: {
+                              type: "file",
+                              name: "picture",
+                              accept: "image/*",
+                              id: "file-input"
+                            },
+                            on: { change: _vm.imChanged }
                           })
                         ]),
                         _vm._v(" "),
@@ -41353,7 +41465,7 @@ var render = function() {
                                 expression: "price"
                               }
                             ],
-                            staticClass: "rounded-sm p-2",
+                            staticClass: "rounded-xl p-2 h-7",
                             attrs: {
                               type: "text",
                               min: "0",
@@ -41399,10 +41511,7 @@ var render = function() {
                               "button",
                               {
                                 staticClass: "rounded px-3 py-1 bg-blue-600",
-                                attrs: {
-                                  type: "submit",
-                                  disabled: _vm.onsubmition
-                                }
+                                attrs: { type: "submit", disabled: false }
                               },
                               [
                                 _vm._v(
@@ -41450,12 +41559,16 @@ var staticRenderFns = [
       "div",
       {
         staticClass:
-          "w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-5"
+          "w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-7 gap-3"
       },
       [
         _c("div", [_vm._v("ID")]),
         _vm._v(" "),
         _c("div", [_vm._v("NAME")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "overflow-hidden" }, [_vm._v("DESCRIPTION")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "overflow-hidden" }, [_vm._v("PICTURE")]),
         _vm._v(" "),
         _c("div", [_vm._v("PRICE")]),
         _vm._v(" "),
@@ -41548,7 +41661,7 @@ var render = function() {
         "dir",
         {
           staticClass:
-            "flex justify-center items-start h-screen w-screen shadow-lg fixed top-0 left-0 z-10 vh-100 bg-black bg-opacity-30",
+            "flex justify-center overflow-scroll items-start h-screen w-screen shadow-lg fixed top-0 left-0 z-10 vh-100 bg-black bg-opacity-30",
           on: {
             click: function($event) {
               if ($event.target !== $event.currentTarget) {
@@ -41591,13 +41704,24 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-5"
+      staticClass:
+        "w-full h-auto bg-gray-50 rounded-lg px-12 grid grid-cols-7 gap-3"
     },
     [
       _c("div", [_vm._v(_vm._s(_vm.product.id))]),
       _vm._v(" "),
       _c("div", { staticClass: "overflow-hidden" }, [
         _vm._v(_vm._s(_vm.product.name))
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "overflow-hidden" }, [
+        _vm._v(_vm._s(_vm.product.description))
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "overflow-hidden" }, [
+        _c("a", { attrs: { href: _vm.product.picture } }, [
+          _vm._v(_vm._s(_vm.product.picture))
+        ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "overflow-hidden" }, [

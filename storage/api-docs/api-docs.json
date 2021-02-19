@@ -207,6 +207,25 @@
                         }
                     },
                     {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Product description",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "picture",
+                        "in": "query",
+                        "description": "Product picture",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        },
+                        "content": "multipart/form-data"
+                    },
+                    {
                         "name": "price",
                         "in": "query",
                         "description": "Product price",

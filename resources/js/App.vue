@@ -1,5 +1,5 @@
 <template>
-    <div class="container max-w-full max-h-full">
+    <div class="container max-w-full max-h-screen">
         <default-layout></default-layout>
         <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductsModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,6 +40,9 @@ class ProductsModelController extends Controller
     public function index()
     {
         $products = ProductsModel::all();
+        foreach ($products as $product) {
+            $product->picture =  url(ProductsModel::PRODUCT_STORAGE . $product->picture);
+        }
         return response()->json([
             'success' => true,
             'data' => $products
@@ -66,6 +71,7 @@ class ProductsModelController extends Controller
      *      operationId="createProduct",
      *      tags={"Products"},
      *      summary="Create Product",
+     *      
      *      description="Returns created Product data",
      *      @OA\Parameter(
      *          name="name",
@@ -74,6 +80,24 @@ class ProductsModelController extends Controller
      *          in="query",
      *          @OA\Schema(
      *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="description",
+     *          description="Product description",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="picture",
+     *          description="Product picture",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="file",
      *          )
      *      ),
      *      @OA\Parameter(
@@ -109,9 +133,15 @@ class ProductsModelController extends Controller
      */
     public function store(Request $request)
     {
+        return response()->json([
+            'success' => true,
+            'data' => $request->all()
+        ], Response::HTTP_OK);
         $validator = Validator::make($request->all(), 
                       [ 
                       'name' => 'required',
+                      'description' => 'required',
+                      'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                       'price' => 'required',
                      ]);  
 
@@ -119,11 +149,24 @@ class ProductsModelController extends Controller
 
                return response()->json(['error'=>$validator->errors()], 401); 
 
-            }  
-        $product = new ProductsModel();
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->save();
+        }
+        $product = null;
+        
+        if (request()->file('picture')) {
+            $ext = request()->file('picture')->getClientOriginalExtension();
+            $productName = 'product_' . time() . '.' . $ext;
+
+            $path = request()->file('picture')->storeAs('public/products', $productName);
+            
+            $product = new ProductsModel();
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->picture = $productName;
+            $product->price = $request->price;
+            $product->save();
+            $product->picture =  url(ProductsModel::PRODUCT_STORAGE . $product->picture);
+        }
+        
 
         return response()->json([
             'success' => true,
@@ -174,6 +217,25 @@ class ProductsModelController extends Controller
      *              type="string"
      *          )
      *      ),
+     * 
+     *      @OA\Parameter(
+     *          name="description",
+     *          description="Product description",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="picture",
+     *          description="Product picture",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="file",
+     *          )
+     *      ),
      *      @OA\Parameter(
      *          name="price",
      *          description="Product price",
@@ -207,26 +269,52 @@ class ProductsModelController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        
         $validator = Validator::make($request->all(), 
                       [ 
                       'name' => 'required',
+                      'description' => 'required',
                       'price' => 'required',
                      ]);  
 
          if ($validator->fails()) {  
 
-               return response()->json(['error'=>$validator->errors()], 401); 
+            return response()->json(['error'=>$validator->errors()], 401); 
 
-            }  
+        }  
         $product = ProductsModel::find($id);
         if(!$product){
             return response()->json([
             'success' => false,
         ], Response::HTTP_NOT_FOUND);
         }
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->save();
+        
+        
+        if (request()->file('picture')) {
+            $path = "products/" . $product->picture;
+            if(Storage::exists($path)){
+                Storage::delete($path);
+            }
+            $ext = request()->file('picture')->getClientOriginalExtension();
+            $productName = 'product_' . time() . '.' . $ext;
+
+            request()->file('picture')->storeAs('public/products', $productName);
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->picture = $productName;
+            $product->price = $request->price;
+            $product->save();
+            $product->picture =  url(ProductsModel::PRODUCT_STORAGE . $product->picture);
+        }else{
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->save();
+            $product->picture =  url(ProductsModel::PRODUCT_STORAGE . $product->picture);
+        }
+        // $product->name = $request->name;
+        // $product->price = $request->price;
+        // $product->save();
 
         return response()->json([
             'success' => true,
