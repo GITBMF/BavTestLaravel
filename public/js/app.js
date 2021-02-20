@@ -41039,7 +41039,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container max-w-full max-h-screen" },
+    { staticClass: "container max-w-full max-h-screen h-full w-full" },
     [_c("default-layout")],
     1
   )
@@ -41068,7 +41068,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "the-home w-full h-full" }, [
-    _c("div", {}),
+    _c("div", { staticClass: "h-28" }),
     _vm._v(" "),
     _vm.isLogin
       ? _c(

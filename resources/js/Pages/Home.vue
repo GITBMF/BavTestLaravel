@@ -1,6 +1,6 @@
 <template>
     <div class="the-home w-full h-full">
-        <div class=""></div>
+        <div class="h-28"></div>
         <div
             v-if="isLogin"
             class="w-full h-full px-12 flex justify-center items-center"
