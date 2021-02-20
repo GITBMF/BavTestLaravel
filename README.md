@@ -3,9 +3,15 @@
 ## Executer les commandes suivantes
 
 -   cp .env.example .env
--   Ajouter les config de la bd dan le .env, le nom de la bd a utiliser c'est youpiexchangedb
+-   Ajouter les config de la bd dans le .env, le nom de la bd a utiliser, le username et password
 -   run composer install
 -   run php artisan key:generate
+-   run php artisan jwt:secret
+-   run php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+-   run php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+-   run php artisan l5-swagger:generate
+-   run php artisan migrate
+-   run php artisan storage:link
 -   run npm install
 -   run npm run watch
 -   run php artisan serve
